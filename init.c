@@ -14,10 +14,13 @@ game_t *init_game(void) {
 	game->delta_time = 0;
 
 	game->camera.zoom = CAMERA_ZOOM;
+	game->camera.offset = (Vector2){(float)SCREEN_WIDTH / 2, (float)SCREEN_HEIGHT / 2};
 
 	game->state = MENU;
 	game->entities = NULL;
 	game->no_entities = 0;
+
+	game->path_to_texture = "assets/city/simplified/Level_0/Tiles.png";
 
 	entity_t player = (entity_t) {
 		.id = 0,
@@ -46,6 +49,7 @@ game_t *init_game(void) {
 
 	SGLIB_LIST_ADD(entity_node_t, game->entities, player_node, next);
 
+	game->world_texture = LoadTexture(game->path_to_texture);
 	load_entity_textures(game);
 	return game;
 }

@@ -36,6 +36,9 @@ typedef struct game_t {
 
 	entity_node_t *entities;
 	int no_entities;
+
+	Texture2D world_texture;
+	char *path_to_texture;
 } game_t;
 
 game_t *init_game(void);

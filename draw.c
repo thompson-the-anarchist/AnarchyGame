@@ -24,6 +24,7 @@ void draw_frame(game_t *game) {
 
 static void draw_game(game_t *game) {
 	BeginMode2D(game->camera);
+	DrawTexture(game->world_texture, 0, 0, WHITE);
 	for (entity_node_t *cur = game->entities; cur != NULL; cur = cur->next) {
 		DrawTexturePro(
 			cur->entity.texture,
