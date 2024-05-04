@@ -24,8 +24,8 @@ game_t *init_game(void) {
 
 	entity_t player = (entity_t) {
 		.id = 0,
-		.x = 5,
-		.y = 5,
+		.x = 5.0f,
+		.y = 5.0f,
 		.box_rec = (Rectangle){
 			.x = player.x * TILE_SIZE,
 			.y = player.y * TILE_SIZE,
@@ -40,7 +40,7 @@ game_t *init_game(void) {
 		.texture_path = "assets/player.png",
 		.anim_frame_counter = 0,
 		.is_walking = false,
-		.speed = 0.0f,
+		.speed = PLAYER_SPEED,
 	};
 
 	entity_node_t *player_node = calloc(1, sizeof(entity_node_t));

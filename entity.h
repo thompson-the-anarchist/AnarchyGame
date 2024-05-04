@@ -11,7 +11,7 @@ typedef enum entity_dir_e {
 } entity_dir_e;
 
 typedef struct entity_t {
-	int x, y;
+	float x, y;
 	int id;
 	int anim_frame_counter;
 	float speed;

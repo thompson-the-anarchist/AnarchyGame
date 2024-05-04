@@ -5,13 +5,16 @@
 #include "entity.h"
 #include "sglib.h"
 
+// gamewide variables
 #define TILE_SIZE 16
 #define CAMERA_ZOOM 4.0f
-#define ANIM_FRAME_FRAMES 10
+#define ANIM_FRAME_FRAMES 6
 #define ANIM_NO_FRAMES 3
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 640
+
+#define PLAYER_SPEED 50.0f
 
 #define MAX_FPS 60
 #define GAME_NAME "ANARCHY"

@@ -11,7 +11,11 @@ void draw_frame(game_t *game) {
 			break;
 		case PLAYING:
 			ClearBackground(GRAY);
+			char buffer[64];
+			sprintf(buffer, "%f %f", game->entities->entity.x, game->entities->entity.y);
 			draw_game(game);
+			DrawText(buffer, 0, 0, 20, BLACK);
+			DrawFPS(0, 20);
 			break;
 		case GAME_OVER:
 			ClearBackground(RED);

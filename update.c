@@ -30,33 +30,30 @@ void update_frame(game_t *game) {
 }
 
 static void update_game(game_t *game) {
+	if (IsKeyDown(KEY_UP)) {
+		game->entities->entity.box_rec.y -= PLAYER_SPEED * game->delta_time;
+		game->entities->entity.facing = DIR_NORTH;
+		game->entities->entity.is_walking = true;
+	};
+	if (IsKeyDown(KEY_DOWN)) {
+		game->entities->entity.box_rec.y += PLAYER_SPEED * game->delta_time;
+		game->entities->entity.facing = DIR_SOUTH;
+		game->entities->entity.is_walking = true;
+	};
+	if (IsKeyDown(KEY_LEFT)) {
+		game->entities->entity.box_rec.x -= PLAYER_SPEED * game->delta_time;
+		game->entities->entity.facing = DIR_WEST;
+		game->entities->entity.is_walking = true;
+	};
+	if (IsKeyDown(KEY_RIGHT)) {
+		game->entities->entity.box_rec.x += PLAYER_SPEED * game->delta_time;
+		game->entities->entity.facing = DIR_EAST;
+		game->entities->entity.is_walking = true;
+	};
 
-	// if player is not walking, let them walk
-	if (!game->entities->entity.is_walking) {
-		if (IsKeyPressed(KEY_UP)) { entity_walk(game, &game->entities->entity, DIR_NORTH, true); }
-		if (IsKeyPressed(KEY_DOWN)) { entity_walk(game, &game->entities->entity, DIR_SOUTH, true); }
-		if (IsKeyPressed(KEY_LEFT)) { entity_walk(game, &game->entities->entity, DIR_WEST, true); }
-		if (IsKeyPressed(KEY_RIGHT)) { entity_walk(game, &game->entities->entity, DIR_EAST, true); }
-		if (game->entities->entity.anim_frame_counter > 0) {
-			if (IsKeyDown(KEY_UP)) {
-				entity_walk(game, &game->entities->entity, DIR_NORTH, true);
-			}
-			if (IsKeyDown(KEY_DOWN)) {
-				entity_walk(game, &game->entities->entity, DIR_SOUTH, true);
-			}
-			if (IsKeyDown(KEY_LEFT)) {
-				entity_walk(game, &game->entities->entity, DIR_WEST, true);
-			}
-			if (IsKeyDown(KEY_RIGHT)) {
-				entity_walk(game, &game->entities->entity, DIR_EAST, true);
-			}
-		}
-	}
-
-	// track the camera
 	game->camera.target = (Vector2){
-		game->entities->entity.x * TILE_SIZE,
-		game->entities->entity.y * TILE_SIZE,
+		game->entities->entity.box_rec.x,
+		game->entities->entity.box_rec.y,
 	};
 
 	// check all other entities
@@ -74,62 +71,14 @@ static void update_entities(game_t *game) {
 			cur->entity.is_walking = false;
 			cur->entity.speed = 0;
 		}
-		cur->entity.box_rec.x = cur->entity.x * TILE_SIZE;
-		cur->entity.box_rec.y = cur->entity.y * TILE_SIZE;
 		if (cur->entity.is_walking) {
 			cur->entity.frame_rec.x = cur->entity.facing * (ANIM_NO_FRAMES + 1) * TILE_SIZE +
 				cur->entity.anim_frame_counter * TILE_SIZE;
-			entity_walk(game, &cur->entity, cur->entity.facing, false);
 		} else {
 			cur->entity.frame_rec.x = cur->entity.facing * (ANIM_NO_FRAMES + 1) * TILE_SIZE;
 		}
+		cur->entity.x = cur->entity.box_rec.x / TILE_SIZE;
+		cur->entity.y = cur->entity.box_rec.y / TILE_SIZE;
 
-	}
-}
-
-static void entity_walk(game_t *game, entity_t *ent, entity_dir_e dir, bool reset_anim) {
-	if (reset_anim) {
-		ent->anim_frame_counter = 0;
-		ent->is_walking = true;
-	}
-
-	ent->facing = dir;
-	ent->speed = (float)TILE_SIZE / ANIM_NO_FRAMES;
-
-	if (reset_anim) {
-		switch (ent->facing) {
-			case DIR_NORTH: ent->y--; break;
-			case DIR_SOUTH: ent->y++; break;
-			case DIR_WEST: ent->x--; break;
-			case DIR_EAST: ent->x++; break;
-			default: break;
-		}
-	}
-
-	switch (ent->facing) {
-		case DIR_NORTH:
-			ent->box_rec.y = (TILE_SIZE * ent->y)
-				+ TILE_SIZE - (ent->speed * ent->anim_frame_counter
-				* game->delta_time * MAX_FPS);
-			break;
-			game->camera.target.y = (TILE_SIZE * ent->y)
-				+ TILE_SIZE - (ent->speed * ent->anim_frame_counter
-				* game->delta_time * MAX_FPS);
-		case DIR_SOUTH:
-			ent->box_rec.y = (TILE_SIZE * ent->y)
-				- TILE_SIZE + (ent->speed * ent->anim_frame_counter
-				* game->delta_time * MAX_FPS);
-			break;
-		case DIR_WEST:
-			ent->box_rec.x = (TILE_SIZE * ent->x)
-				+ TILE_SIZE - (ent->speed * ent->anim_frame_counter
-				* game->delta_time * MAX_FPS);
-			break;
-		case DIR_EAST:
-			ent->box_rec.x = (TILE_SIZE * ent->x)
-				- TILE_SIZE + (ent->speed * ent->anim_frame_counter
-				* game->delta_time * MAX_FPS);
-			break;
-		default: break;
 	}
 }
