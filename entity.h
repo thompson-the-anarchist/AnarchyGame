@@ -2,7 +2,6 @@
 #define _ENTITY_H
 
 #include <raylib.h>
-#include "texture.h"
 
 typedef enum entity_dir_e {
 	DIR_NORTH = 0,
